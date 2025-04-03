@@ -1,0 +1,1 @@
+{"root":["./src/app.ts","./src/index.ts","./src/config/prisma.config.ts","./src/controller/user.controller.ts","./src/middleware/validateRequest.middleware.ts","./src/middleware/whitelistRequst.middleware.ts","./src/route/user.route.ts","./src/service/user.service.ts","./src/utils/error.ts","./src/validator/user.validator.ts"],"version":"5.8.2"}

@@ -1,0 +1,30 @@
+{
+  "name": "order_matching_system",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node --env-file=.env dist/index.js",
+    "dev": "node --watch --env-file=.env dist/index.js",
+    "build": "tsc --build"
+  },
+  "keywords": [],
+  "author": "Pranav Joshi",
+  "license": "MIT",
+  "description": "Just a Financial order matching system",
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "prisma": "^6.5.0",
+    "typescript": "^5.8.2"
+  }
+}
