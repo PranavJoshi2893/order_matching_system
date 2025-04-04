@@ -1,7 +1,16 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { BadRequestError, ForbiddenError, NotFoundError } from "../utils/error";
+import {
+  BadRequestError,
+  ConflictError,
+  ForbiddenError,
+  NotFoundError,
+} from "../utils/error";
 import { compare, hash } from "bcrypt";
 import prisma from "../config/prisma.config";
+import {
+  accessTokenGenerator,
+  refreshTokenGenerator,
+} from "../utils/jwt.generator";
 
 interface IUser {
   first_name: string;
@@ -28,7 +37,8 @@ async function registerUser(userDetails: IUser) {
     return { message: "New user added" };
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError) {
-      throw new NotFoundError("Username not found");
+      if (err.code === "P2002")
+        throw new ConflictError("Username already taken");
     }
     throw new BadRequestError(
       "Something bad happened during user registration"
@@ -50,7 +60,20 @@ async function loginUser(userDetails: IUser) {
 
   if (!isPasswdMatched) throw new ForbiddenError("Invalid password");
 
-  return { message: "Login Successful!" };
+  const access_token = await accessTokenGenerator({ sub: user.uid });
+  const refresh_token = await refreshTokenGenerator({ sub: user.uid });
+
+  return {
+    message: "Login Successful!",
+    access_token,
+    refresh_token,
+  };
 }
 
-export { registerUser, loginUser };
+async function refresh(payload: { sub: string }) {
+  const access_token = await accessTokenGenerator(payload);
+
+  return { access_token };
+}
+
+export { registerUser, loginUser, refresh };

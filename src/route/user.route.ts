@@ -6,12 +6,15 @@ import {
 } from "../validator/user.validator";
 import validateRequest from "../middleware/validateRequest.middleware";
 import whitelistFields from "../middleware/whitelistRequest.middleware";
+import verifyRefreshToken from "../middleware/refreshTokenVerification.middleware";
+import verifyAccessToken from "../middleware/accessTokenVerification.middleware copy";
 
 const router = Router();
 
 router
-  .route("/")
+  .route("/register")
   .post(
+    verifyAccessToken,
     registrationValidator,
     validateRequest,
     whitelistFields(["first_name", "last_name", "username", "password"]),
@@ -25,5 +28,7 @@ router
     whitelistFields(["username", "password"]),
     userController.loginUser
   );
+
+router.route("/refresh").get(verifyRefreshToken, userController.refresh);
 
 export default router;
